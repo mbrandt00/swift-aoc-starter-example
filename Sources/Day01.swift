@@ -22,8 +22,20 @@ struct Day01: AdventDay {
   }
 
   // Replace this with your solution for the second part of the day's challenge.
-  func part2() -> Any {
-    // Sum the maximum entries in each set of data
-    entities.map { $0.max() ?? 0 }.reduce(0, +)
+  func part2() -> Int {
+    let (list1, list2): ([Int], [Int]) = entities.reduce(into: ([], [])) { result, tuple in
+      result.0.append(tuple[0])
+      result.1.append(tuple[1])
+    }
+
+    // Create frequency dictionary for list2
+    let list2Frequencies = list2.reduce(into: [:]) { counts, num in
+      counts[num, default: 0] += 1
+    }
+
+    // Calculate total using the frequency dictionary
+    return list1.reduce(0) { total, num in
+      total + (num * (list2Frequencies[num] ?? 0))
+    }
   }
 }
